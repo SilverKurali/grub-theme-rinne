@@ -135,6 +135,8 @@ screenshots/    预览图
 
 关于背景图的版权立场（非官方 / 非商业 / 引用性质 / 24 小时下架承诺），在 **[COPYRIGHT.md](COPYRIGHT.md)**。
 
+**欢迎 PR / issue / fork** —— 前提是不涉及任何商业行为。详见 **[CONTRIBUTING.md](CONTRIBUTING.md)**。
+
 **三个硬性前提：**
 
 1. **先备份**（`sudo ~/备份到移动硬盘.sh`，或者 `btrfs subvolume snapshot -r /`）
