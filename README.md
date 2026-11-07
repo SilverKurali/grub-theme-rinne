@@ -133,6 +133,8 @@ screenshots/    预览图
 
 完整的风险说明、真实事故清单、责任划分，在 **[DISCLAIMER.md](DISCLAIMER.md)**（地狱级免责声明）。
 
+关于背景图的版权立场（非官方 / 非商业 / 引用性质 / 24 小时下架承诺），在 **[COPYRIGHT.md](COPYRIGHT.md)**。
+
 **三个硬性前提：**
 
 1. **先备份**（`sudo ~/备份到移动硬盘.sh`，或者 `btrfs subvolume snapshot -r /`）
@@ -159,6 +161,6 @@ screenshots/    预览图
 | 文件 | 许可证 |
 |---|---|
 | `theme/unicode.pf2` | GNU Unifont，GPLv2 + 字体嵌入例外（保持原许可） |
-| `theme/background.png`、`theme/original/*` | 《ISLAND》官方素材，版权归 Frontwing。仅作示例，**禁止商业使用**。要再分发或商用请先换成自己的图 |
+| `theme/background.png`、`theme/original/*` | 《ISLAND》官方素材，版权归 Frontwing。仅作示例，**禁止商业使用**。要再分发或商用请先换成自己的图。完整立场见 [COPYRIGHT.md](COPYRIGHT.md) |
 
 **想商用怎么办**：把 `theme/background.png` 换成你自己的图，`theme.txt` 和九宫格 pixmap 是我写的，那时可以来找我谈授权。
