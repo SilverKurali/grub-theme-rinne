@@ -36,10 +36,23 @@ sudo reboot
 
 **换背景**：把任意 1920×1080 的 PNG 命名成 `background.png` 覆盖 `theme/background.png` 即可。JPEG 也能用（改 `theme.txt` 里的 `desktop-image`），但 PNG 解码更稳。
 
+**官方原图**放在 `theme/original/`：
+
+| 文件 | 尺寸 | 来源 |
+|---|---|---|
+| `official-hero-1920x620.jpg` | 1920×620 | Steam 库页面横幅 |
+| `official-keyvisual-1438x810.jpg` | 1438×810 | Steam 商店页背景 |
+| `official-logo.png` | 588×345 RGBA | 官网 logo |
+
+这两张原图**不能直接做 GRUB 背景**：1920×620 是 3.1:1，塞进 16:9 必然要么裁掉角色的脸、要么上下留黑边；1438×810 比例对了但分辨率不够 1920×1080。
+
+`background.png` 是在 `official-keyvisual-1438x810.jpg` 基础上做的：放大到 1920×1080 → 左侧加暗色渐变（保证菜单文字可读）→ 左上角叠官方 logo → 右下角叠 Fedora wordmark。
+
 ## 目录
 
 ```
 theme/          theme.txt + background.png + 九宫格 pixmap + unicode.pf2
+theme/original/ 官方素材原图（未处理，仅供对照）
 scripts/        btrfs 快照方案（可选）
 docs/           安装细节、踩坑清单
 screenshots/    预览图
