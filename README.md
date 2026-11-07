@@ -43,16 +43,41 @@ sudo reboot
 | `official-hero-1920x620.jpg` | 1920×620 | Steam 库页面横幅 |
 | `official-keyvisual-1438x810.jpg` | 1438×810 | Steam 商店页背景 |
 | `official-logo.png` | 588×345 RGBA | 官网 logo |
+| `official-icon-256.png` | 256×256 RGBA | 游戏图标 |
+| `composite-background.jpg` | 1920×1080 | 合成后的成品（= `theme/background.png` 的 JPEG 版） |
+
+`screenshots/pixmaps-source/` 里是九宫格切片的原始小图（32×32），可以对照 `theme/select_*.png` 看切法。
 
 这两张原图**不能直接做 GRUB 背景**：1920×620 是 3.1:1，塞进 16:9 必然要么裁掉角色的脸、要么上下留黑边；1438×810 比例对了但分辨率不够 1920×1080。
 
 `background.png` 是在 `official-keyvisual-1438x810.jpg` 基础上做的：放大到 1920×1080 → 左侧加暗色渐变（保证菜单文字可读）→ 左上角叠官方 logo → 右下角叠 Fedora wordmark。
+
+## 效果
+
+**真机启动截图**（QEMU + OVMF 跑的真 GRUB 2.12）：
+
+![真机](screenshots/real-boot.png)
+
+**三层菜单**：
+
+| 主菜单 | 快照列表 | 恢复点 |
+|---|---|---|
+| ![主](screenshots/main.jpg) | ![快照](screenshots/snapshots.jpg) | ![恢复](screenshots/restore.jpg) |
+
+**只换背景、不装快照方案**的样子：
+
+![纯主题](screenshots/wallpaper-preview.jpg)
+
+**九宫格高亮条特写**（暗色填充 + 白边，在亮背景上也不糊）：
+
+![玻璃条](screenshots/glass-bar-preview.jpg)
 
 ## 目录
 
 ```
 theme/          theme.txt + background.png + 九宫格 pixmap + unicode.pf2
 theme/original/ 官方素材原图（未处理，仅供对照）
+screenshots/    各层预览 + 真机截图
 scripts/        btrfs 快照方案（可选）
 docs/           安装细节、踩坑清单
 screenshots/    预览图
