@@ -1,0 +1,10 @@
+[Unit]
+Description=Island: 把 BLS 英文标题改回中文
+After=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/island-bls-titles
+TimeoutStartSec=120
+StandardOutput=journal
+StandardError=journal

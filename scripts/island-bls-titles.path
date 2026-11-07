@@ -1,0 +1,9 @@
+[Unit]
+Description=Island: 监控 BLS 条目标题变化
+
+[Path]
+PathChanged=/boot/loader/entries
+PathModified=/boot/loader/entries
+
+[Install]
+WantedBy=paths.target

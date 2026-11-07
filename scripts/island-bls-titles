@@ -1,0 +1,47 @@
+#!/bin/bash
+# ============================================================
+#  island-bls-titles
+#  把 /boot/loader/entries/*.conf 里的英文 title 改成中文
+#  由 island-bls-titles.path 在内核安装/升级时自动触发
+# ============================================================
+set -u
+
+ENTRY_DIR="/boot/loader/entries"
+[ -d "$ENTRY_DIR" ] || exit 0
+
+changed=0
+
+for f in "$ENTRY_DIR"/*.conf; do
+    [ -f "$f" ] || continue
+
+    version=$(sed -n 's/^version[[:space:]]\+//p' "$f" | head -1)
+    [ -n "$version" ] || continue
+
+    # 0-rescue-<machine-id> → 救援模式
+    if [[ "$version" == 0-rescue-* ]]; then
+        new="Fedora Linux 救援模式（0-rescue）"
+    else
+        # 7.2.15-300.fc45.x86_64 → 主版本 7.2.15 / 发行版 45
+        base=${version%%.fc*}
+        fc=${version#*.fc}
+        fc=${fc%%.*}
+        rel=$(echo "$base" | cut -d- -f1)
+        if [[ -n "$rel" && -n "$fc" ]]; then
+            new="Fedora Linux ${fc}（正常启动 · ${rel}）"
+        else
+            new="Fedora Linux（${version}）"
+        fi
+    fi
+
+    cur=$(sed -n 's/^title[[:space:]]\+//p' "$f" | head -1)
+    if [ "$cur" != "$new" ]; then
+        sed -i "s|^title[[:space:]].*|title ${new}|" "$f"
+        echo "updated: $(basename "$f") → ${new}"
+        changed=1
+    fi
+done
+
+if [ "$changed" = "1" ]; then
+    grub2-mkconfig -o /boot/grub2/grub.cfg >/dev/null 2>&1 && echo "grub.cfg regenerated"
+fi
+exit 0

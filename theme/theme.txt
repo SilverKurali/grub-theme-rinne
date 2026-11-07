@@ -1,33 +1,53 @@
-# ISLAND — GRUB2 theme
+# ISLAND — GRUB2 theme (rinne)
 title-text: ""
 
 desktop-image: "background.png"
 
 + boot_menu {
     left = 5%
-    top = 44%
+    top = 40%
     width = 30%
-    height = 42%
+    height = 46%
 
-    item_font = "Unifont Regular 16"
+    item_font = "MiSans 24 Regular 24"
     item_color = "#96b4cc"
     selected_item_color = "#ffffff"
     selected_item_pixmap_style = "select_*.png"
     menu_pixmap_style = "menu_*.png"
 
     item_height = 48
-    item_padding = 20
-    item_spacing = 12
-    icon_width = 0
-    icon_height = 0
+    item_padding = 22
+    item_spacing = 10
+
+    icon_width = 22
+    icon_height = 22
+    item_icon_space = 12
+
+    scrollbar = true
+    scrollbar_width = 6
+    scrollbar_thumb = "scrollbar_thumb.png"
 }
 
 + label {
-    top = 89%
+    top = 90%
     left = 5%
     width = 30%
     align = "left"
     color = "#4f708f"
-    font = "Unifont Regular 16"
+    font = "MiSans 24 Regular 24"
     text = "↑/↓ 选择    Enter 启动    e 编辑    c 命令行"
+}
+
+# 倒计时进度条（只有 timeout 时才显示）
++ progress_bar {
+    id = "__timeout__"
+    left = 5%
+    top = 87%
+    width = 30%
+    height = 6
+    fg_color = "#7ec8e3"
+    bg_color = "#0a1420"
+    border_color = "#2a4a5e"
+    text = ""
+    show_text = false
 }

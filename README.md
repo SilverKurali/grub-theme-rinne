@@ -129,9 +129,13 @@ sudo reboot
 | `island-boot-action` | GRUB 里选「拍 / 删快照」后的开机执行器 |
 | `island-fstab-patch.py` | 改 fstab 里 `/` 行的 `subvol=` |
 | `island-snapshot-wizard.desktop` | 自启动项（只在快照里触发，正常系统不弹窗） |
+| `island-bls-titles` | 把 BLS 里的英文标题改回中文（可选） |
+| `island-bls-titles.path` + `.service` | systemd 监控单元，内核升级后自动触发上一条 |
 | `island-boot-action.service` | systemd 单元，配合 `island-boot-action` |
 
 **装之前先读 [docs/PITFALLS.md](docs/PITFALLS.md)**，那里面全是踩过的坑，能省几个小时。
+
+> **`island-bls-titles` 是可选组件。** Fedora 每次内核升级都会把 `Fedora Linux 45（正常启动 · 7.2.15）` 重写成英文的 `Fedora Linux (...) 45 (Workstation Edition)`。装了这个 path unit 就会自动改回中文；不装也能用，只是升级后要手动改一次。详见 [docs/INSTALL.md](docs/INSTALL.md#可选让-fedora-的菜单标题一直是中文)。
 
 ---
 
