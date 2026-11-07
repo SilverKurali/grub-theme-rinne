@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=ISLAND Snapshot Wizard
+Comment=从恢复点启动时询问是否永久恢复
+Exec=sh -c 'grep -q "subvol=snapshots/root-2" /proc/cmdline && exec /usr/local/bin/island-snapshot-wizard || true'
+Terminal=false
+NoDisplay=true
+X-GNOME-Autostart-enabled=true
+X-GNOME-Autostart-Phase=Applications

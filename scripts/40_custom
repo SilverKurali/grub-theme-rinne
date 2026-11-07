@@ -1,0 +1,86 @@
+#!/bin/sh
+# ============================================================
+#  Island 主题配套：btrfs 快照启动（三层子菜单）
+#  grub2-mkconfig 时执行，扫描 /snapshots/ 生成条目
+# ============================================================
+set -u
+
+BOOT_UUID="27288f90-6d80-458b-b91a-9c01ec15b91b"
+ROOT_UUID="cd36d682-1940-44ba-be9b-f9b34d9ab752"
+KERNEL="/vmlinuz-7.2.15-300.fc45.x86_64"
+INITRD="/initramfs-7.2.15-300.fc45.x86_64.img"
+SNAPDIR="/snapshots"
+
+mkdir -p "$SNAPDIR" 2>/dev/null || true
+MOUNTED_HERE=0
+if ! mountpoint -q "$SNAPDIR" 2>/dev/null; then
+    mount -o ro "$SNAPDIR" 2>/dev/null && MOUNTED_HERE=1
+fi
+
+# $1=subvol  $2=标题  $3=额外参数
+emit_entry() {
+    local sv="$1" title="$2" extra="${3:-}"
+    cat <<EOF
+        menuentry "$title" --class fedora --class gnu-linux {
+            insmod btrfs
+            insmod part_gpt
+            search --no-floppy --fs-uuid --set=root $BOOT_UUID
+            linux $KERNEL root=UUID=$ROOT_UUID rootflags=subvol=$sv rw $extra rhgb quiet rd.driver.blacklist=nouveau,nova_core modprobe.blacklist=nouveau,nova_core
+            initrd $INITRD
+        }
+EOF
+}
+
+parse_label() {
+    core=${1#root-}
+    datep=${core%%-*}
+    timep=${core##*-}
+    [ ${#datep} -eq 8 ] || { echo "$1"; return; }
+    case ${#timep} in
+      6) echo "${datep:0:4}-${datep:4:2}-${datep:6:2} ${timep:0:2}:${timep:2:2}:${timep:4:2}" ;;
+      4) echo "${datep:0:4}-${datep:4:2}-${datep:6:2} ${timep:0:2}:${timep:2:2}" ;;
+      *) echo "$1" ;;
+    esac
+}
+
+LABEL=""
+if [ -f /boot/grub2/snapshot-info.cfg ]; then
+    LABEL=$(sed -n 's/.*set snap_label="\(.*\)".*/\1/p' /boot/grub2/snapshot-info.cfg 2>/dev/null | head -1)
+fi
+TOTAL=$(ls -1d "$SNAPDIR"/root-2* 2>/dev/null | grep -v -- '-rw$' | wc -l)
+
+if [ -d "$SNAPDIR/root-restore" ] || [ "$TOTAL" -gt 0 ]; then
+    if [ -n "$LABEL" ]; then
+        echo "submenu \"从快照启动（$LABEL）\" --class fedora --class gnu-linux {"
+    else
+        echo "submenu \"从快照启动\" --class fedora --class gnu-linux {"
+    fi
+
+    # --- 拍快照 ---
+    emit_entry "/" "拍一个新快照（重启后自动拍，再重启回来）" "island_snapshot=1"
+
+    # --- 试验副本 ---
+    if [ -d "$SNAPDIR/root-restore" ]; then
+        emit_entry "snapshots/root-restore" "试验副本（随便改，不影响系统）"
+    fi
+
+    # --- 每个恢复点 ---
+    for d in $(ls -1d "$SNAPDIR"/root-2* 2>/dev/null | grep -v -- '-rw$' | sort -r); do
+        [ -d "$d" ] || continue
+        name=$(basename "$d")
+        label=$(parse_label "$name")
+        rw="${name}-rw"
+        echo "    submenu \"恢复点 $label\" --class fedora --class gnu-linux {"
+        if [ -d "$SNAPDIR/$rw" ]; then
+            emit_entry "snapshots/$rw" "确定恢复（重启后系统就是这个状态）" "island_restore=1"
+        fi
+        emit_entry "snapshots/$rw" "只看看（重启回原样）"
+        emit_entry "/" "删除此快照（重启后删除，再重启回来）" "island_delete=snapshots/$name"
+        echo "    }"
+    done
+
+    echo "}"
+fi
+
+[ "$MOUNTED_HERE" = "1" ] && umount "$SNAPDIR" 2>/dev/null
+exit 0

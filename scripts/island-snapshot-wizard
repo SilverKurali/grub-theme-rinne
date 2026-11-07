@@ -1,0 +1,111 @@
+#!/bin/bash
+# ============================================================
+#  从恢复点启动后的向导（zenity 图形版）
+#  两条进入路径：
+#   A) GRUB 选了「确定恢复」→ cmdline 带 island_restore=1 → 自动执行，不问
+#   B) GRUB 选了「只看看」→ 什么都不做（本来就是可写副本）
+# ============================================================
+set -uo pipefail
+
+ROOT_UUID=cd36d682-1940-44ba-be9b-f9b34d9ab752
+SNAPDIR=/snapshots
+REALROOT=/mnt/.island-realroot
+
+SUBVOL=$(sed -n 's/.*subvol=\(snapshots\/[^ ,]*\).*/\1/p' /proc/cmdline | head -1)
+SUBVOL=${SUBVOL:-}
+
+if [ "${1:-}" = "--demo" ]; then
+    SUBVOL="snapshots/root-20261108-054213-rw"
+    AUTO=1
+else
+    case "$SUBVOL" in
+        snapshots/root-*-rw) AUTO=0 ;;
+        *) exit 0 ;;
+    esac
+    grep -q 'island_restore=1' /proc/cmdline && AUTO=1
+    [ "$AUTO" = "1" ] || exit 0
+fi
+
+NAME=${SUBVOL#snapshots/}
+SRC=${NAME%-rw}
+core=${SRC#root-}
+datep=${core%%-*}; timep=${core##*-}
+if [ ${#datep} -eq 8 ]; then
+    case ${#timep} in
+        6) LABEL="${datep:0:4}-${datep:4:2}-${datep:6:2} ${timep:0:2}:${timep:2:2}:${timep:4:2}" ;;
+        4) LABEL="${datep:0:4}-${datep:4:2}-${datep:6:2} ${timep:0:2}:${timep:2:2}" ;;
+        *) LABEL="$SRC" ;;
+    esac
+else
+    LABEL="$SRC"
+fi
+
+if [ "$AUTO" = "0" ]; then
+    TEXT="你正在从恢复点启动，不是真正的系统。
+
+恢复点：$LABEL
+来源：/snapshots/$NAME（可写副本）
+
+这个状态就是你拍快照那一刻的系统。
+
+要把它变成真正的系统吗？
+
+  是  →  永久恢复到这里（重启后生效）
+  否  →  只是看看，重启就回原来的系统"
+
+    if ! zenity --question --title="ISLAND 快照向导" --text="$TEXT" \
+            --ok-label="是，恢复到这里" --cancel-label="否，只是看看" \
+            --width=460 --default-cancel 2>/dev/null; then
+        zenity --info --title="ISLAND 快照向导" \
+            --text="好的，不做任何改动。<br><br>重启就回到原来的系统。<br><br>想以后永久恢复，在终端跑：<b>sudo ~/回滚到快照.sh</b>" \
+            --width=420 2>/dev/null
+        exit 0
+    fi
+    PASS=$(zenity --password --title="需要管理员密码" --width=380 2>/dev/null) || exit 1
+    [ -z "$PASS" ] && exit 1
+else
+    # 你在 GRUB 里已经确认过了（选了「确定恢复」），只要密码
+    PASS=$(zenity --password --title="确认恢复「$LABEL」" --width=420 \
+        --text="GRUB 里已经选了「确定恢复」。<br>输入密码，就把系统永久恢复到 <b>$LABEL</b>。" 2>/dev/null) || exit 1
+    [ -z "$PASS" ] && exit 1
+fi
+
+run_sudo() { echo "$PASS" | sudo -S -p '' "$@" 2>/dev/null; }
+
+STAMP=$(date +%Y%m%d-%H%M%S)
+
+(
+ echo "10"; echo "# 挂载真正的系统…"
+ run_sudo mkdir -p "$REALROOT"
+ mountpoint -q "$REALROOT" || run_sudo mount -o subvol=/ "/dev/disk/by-uuid/$ROOT_UUID" "$REALROOT" || exit 1
+
+ echo "35"; echo "# 备份当前系统状态…"
+ [ -d "$SNAPDIR/pre-rollback-$STAMP" ] || {
+     run_sudo btrfs subvolume snapshot "$REALROOT" "$SNAPDIR/pre-rollback-$STAMP"
+     run_sudo btrfs property set "$SNAPDIR/pre-rollback-$STAMP" ro true
+ }
+
+ echo "60"; echo "# 准备可写副本…"
+ [ -d "$SNAPDIR/root-active" ] && run_sudo btrfs subvolume delete "$SNAPDIR/root-active"
+ run_sudo btrfs subvolume snapshot "$SNAPDIR/$SRC" "$SNAPDIR/root-active" || exit 1
+ run_sudo btrfs property set "$SNAPDIR/root-active" ro false
+
+ echo "85"; echo "# 改写 /etc/fstab…"
+ run_sudo cp "$REALROOT/etc/fstab" "$REALROOT/etc/fstab.bak.$STAMP"
+ run_sudo python3 /usr/local/lib/island-fstab-patch.py "$REALROOT/etc/fstab" "$ROOT_UUID"
+ run_sudo sync
+ run_sudo umount "$REALROOT"
+
+ echo "100"; echo "# 完成"
+) | zenity --progress --title="正在恢复" --text="准备中…" --percentage=0 \
+        --auto-close --no-cancel --width=420 2>/dev/null
+
+if zenity --question --title="ISLAND 快照向导" \
+    --text="恢复完成。<br><br>重启后就是「<b>$LABEL</b>」的状态。<br><br>要现在重启吗？" \
+    --ok-label="现在重启" --cancel-label="稍后" --width=420 2>/dev/null; then
+    run_sudo systemctl reboot
+else
+    zenity --info --title="ISLAND 快照向导" \
+        --text="好的，稍后自己重启。<br><br><b>万一重启进不去系统：</b><br>GRUB 按 e → 在 linux 行尾加 rootflags=subvol=/ → Ctrl-X" \
+        --width=480 2>/dev/null
+fi

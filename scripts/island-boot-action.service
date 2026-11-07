@@ -1,0 +1,15 @@
+[Unit]
+Description=Island: GRUB 里选的快照动作（拍/删）
+After=local-fs.target
+ConditionPathExists=/proc/cmdline
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/island-boot-action
+RemainAfterExit=no
+TimeoutStartSec=900
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

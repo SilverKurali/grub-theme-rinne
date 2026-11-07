@@ -1,0 +1,53 @@
+#!/bin/bash
+# ============================================================
+#  GRUB 里选了「拍快照」/「删除此快照」后，开机执行的动作
+#  执行完立刻重启，回到正常系统
+# ============================================================
+set -uo pipefail
+
+CMDLINE=$(cat /proc/cmdline)
+LOG=/var/log/island-boot-action.log
+echo "=== $(date '+%F %T') cmdline: $CMDLINE" >> "$LOG"
+
+SNAP_SCRIPT=/home/silver/拍快照.sh
+MNT=/snapshots
+
+did_something=0
+
+# ---- 拍快照 ----
+if grep -q 'island_snapshot=1' <<<"$CMDLINE"; then
+    echo "action=snapshot" >> "$LOG"
+    mountpoint -q "$MNT" || mount "$MNT"
+    if [ -x "$SNAP_SCRIPT" ]; then
+        bash "$SNAP_SCRIPT" >> "$LOG" 2>&1
+        echo "snapshot exit=$?" >> "$LOG"
+    else
+        echo "ERROR: $SNAP_SCRIPT 不存在或不可执行" >> "$LOG"
+    fi
+    did_something=1
+fi
+
+# ---- 删除某个快照 ----
+DEL=$(sed -n 's/.*island_delete=\([^ ]*\).*/\1/p' <<<"$CMDLINE" | head -1)
+if [ -n "${DEL:-}" ]; then
+    echo "action=delete target=$DEL" >> "$LOG"
+    mountpoint -q "$MNT" || mount "$MNT"
+    NAME="${DEL#snapshots/}"
+    for p in "/$DEL" "$MNT/$NAME" "$MNT/${NAME}-rw"; do
+        if [ -d "$p" ]; then
+            btrfs subvolume delete "$p" >> "$LOG" 2>&1
+            echo "deleted $p" >> "$LOG"
+        fi
+    done
+    # 重新生成菜单
+    if [ -f /boot/grub2/snapshot-info.cfg ]; then
+        grub2-mkconfig -o /boot/grub2/grub.cfg >> "$LOG" 2>&1
+    fi
+    did_something=1
+fi
+
+if [ "$did_something" = "1" ]; then
+    echo "rebooting..." >> "$LOG"
+    sync
+    systemctl reboot
+fi

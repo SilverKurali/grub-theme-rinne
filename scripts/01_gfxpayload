@@ -1,0 +1,4 @@
+#!/usr/bin/sh
+exec tail -n +3 $0
+# 强制内核沿用 GRUB 的图形模式，避免切换文本模式时的黑屏/黑框
+set gfxpayload=keep

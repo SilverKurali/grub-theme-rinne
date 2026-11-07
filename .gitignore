@@ -1,0 +1,6 @@
+*.bak
+*.bak2
+*.prev.jpg
+__pycache__/
+*.pyc
+.DS_Store
