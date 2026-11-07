@@ -4,7 +4,7 @@
 
 ![主菜单](screenshots/main.jpg)
 
-> 背景图为《ISLAND》官方素材，版权归 Frontwing 所有，仅作示例。
+> 背景图与 ISLAND 标识为 Frontwing 官方素材，仅作示例。Fedora 标识归 Red Hat 所有。
 
 ## 特点
 
