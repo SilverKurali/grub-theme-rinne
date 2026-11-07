@@ -107,14 +107,22 @@ screenshots/    预览图
 
 ## License
 
-代码部分 MIT，见 `LICENSE`。
+**PolyForm Noncommercial 1.0.0** — 仅限个人学习、研究、自用。
 
-`unicode.pf2` 来自 GNU Unifont（GPLv2 + 字体嵌入例外）。
+- ✅ 自己用、改、分享给朋友
+- ✅ 研究 GRUB 主题怎么写
+- ✅ 在个人博客/视频里展示和讲解
+- ❌ 商业用途（卖给客户、打包进产品、收费安装）
+- ❌ 公司内部部署
+- ❌ 以营利为目的的服务
 
-`background.png` 使用《ISLAND》（Frontwing / Key）的官方主视觉图，仅作为主题示例随仓库提供，**版权归 Frontwing 所有**。这不是开源素材，请勿商用；如需公开分发或商用，请替换成自己的图片：
+完整条款见 [LICENSE](LICENSE)。
 
-```bash
-cp your-wallpaper.png theme/background.png
-```
+**特例：**
 
-其余部分（theme.txt、九宫格 pixmap、脚本、文档）均为 MIT，可自由使用。
+| 文件 | 许可证 |
+|---|---|
+| `theme/unicode.pf2` | GNU Unifont，GPLv2 + 字体嵌入例外（保持原许可） |
+| `theme/background.png`、`theme/original/*` | 《ISLAND》官方素材，版权归 Frontwing。仅作示例，**禁止商业使用**。要再分发或商用请先换成自己的图 |
+
+**想商用怎么办**：把 `theme/background.png` 换成你自己的图，`theme.txt` 和九宫格 pixmap 是我写的，那时可以来找我谈授权。
