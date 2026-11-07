@@ -116,7 +116,7 @@ screenshots/    预览图
 - ❌ 公司内部部署
 - ❌ 以营利为目的的服务
 
-完整条款见 [LICENSE](LICENSE)。
+完整条款见 [LICENSE](LICENSE)，第三方素材例外见 [NOTICE.md](NOTICE.md)。
 
 **特例：**
 
