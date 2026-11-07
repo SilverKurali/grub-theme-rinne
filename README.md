@@ -131,7 +131,7 @@ screenshots/    预览图
 
 **这套东西会改你的引导流程。改坏了，电脑就开不了机。**
 
-完整的风险说明、真实事故清单、责任划分，在 **[DISCLAIMER.md](DISCLAIMER.md)**（地狱级免责声明）。
+完整的风险说明、真实事故清单、责任划分，见 **[DISCLAIMER.md](DISCLAIMER.md)**。
 
 关于背景图的版权立场（非官方 / 非商业 / 引用性质 / 24 小时下架承诺），在 **[COPYRIGHT.md](COPYRIGHT.md)**。
 
