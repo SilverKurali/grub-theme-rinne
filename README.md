@@ -109,6 +109,24 @@ screenshots/    预览图
 - **GRUB 不能写 btrfs 元数据**，所以「拍快照 / 删快照」实际是「启动 → 脚本执行 → 自动重启」，会看到两次开机。
 - **GRUB 运行时不展开 glob**，快照列表必须在 `grub2-mkconfig` 时生成。
 
+## 支持原作
+
+这个主题用的背景图来自《ISLAND》。如果它让你想起了那座岛，请去支持一下原作——Frontwing 和 Key 做了很多好作品，值得被买。
+
+| | 链接 |
+|---|---|
+| **Steam**（游戏，官方中文） | https://store.steampowered.com/app/857450/ |
+| **官方网站**（游戏 + 动画） | http://never-island.com/ |
+| **角色介绍** | http://never-island.com/character |
+| **商品 / 周边** | http://never-island.com/product/product.html |
+| **动画 Blu-ray** | http://never-island.com/ |
+| **周边商店**（Anime Store.JP） | https://anime-store.jp/ |
+| **Frontwing 官网** | https://www.frontwing.jp/ |
+
+《ISLAND》2016 年 4 月 28 日由 Frontwing 发售，2018 年 7 月动画化。凛音（御原 凛音）的 CV 是田村ゆかり。
+
+**这个仓库不含任何游戏资源。** 背景图仅作主题示例，版权归 Frontwing 所有。想长期用，请自己买一份游戏，或者换一张自己的图。
+
 ## License
 
 **PolyForm Noncommercial 1.0.0** — 仅限个人学习、研究、自用。
