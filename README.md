@@ -1,6 +1,10 @@
-# GRUB 主题 · 星空
+# grub-theme-rinne
+
+> ISLAND 风格的 GRUB 主题 · 深色星空 + btrfs 快照三层菜单
 
 一个为 Fedora 45（及任何 GRUB 2.12 系统）做的深色 GRUB 主题，附带一套 btrfs 快照启动 / 恢复的完整方案。
+
+名字取自《ISLAND》的女主角**凛音（Rinne）**。
 
 ![主菜单](screenshots/main.jpg)
 
@@ -18,14 +22,14 @@
 ## 快速安装
 
 ```bash
-git clone https://github.com/SilverKurali/grub-theme-starry.git
-cd grub-theme-starry
+git clone https://github.com/SilverKurali/grub-theme-rinne.git
+cd grub-theme-rinne
 
-sudo mkdir -p /boot/grub2/themes/starry
-sudo cp theme/* /boot/grub2/themes/starry/
+sudo mkdir -p /boot/grub2/themes/rinne
+sudo cp theme/* /boot/grub2/themes/rinne/
 
 # 写入配置
-echo 'GRUB_THEME="/boot/grub2/themes/starry/theme.txt"' | sudo tee -a /etc/default/grub
+echo 'GRUB_THEME="/boot/grub2/themes/rinne/theme.txt"' | sudo tee -a /etc/default/grub
 sudo sed -i 's/^GRUB_TERMINAL_OUTPUT=.*/GRUB_TERMINAL_OUTPUT="gfxterm"/' /etc/default/grub
 sudo sed -i 's/^GRUB_TERMINAL_INPUT=.*/GRUB_TERMINAL_INPUT="console"/' /etc/default/grub
 grep -q '^GRUB_GFXMODE=' /etc/default/grub || echo 'GRUB_GFXMODE=1920x1080,1280x720,auto' | sudo tee -a /etc/default/grub

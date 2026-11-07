@@ -9,15 +9,15 @@
 ## 只要主题
 
 ```bash
-sudo mkdir -p /boot/grub2/themes/starry
-sudo cp theme/* /boot/grub2/themes/starry/
-sudo chmod -R a+rX /boot/grub2/themes/starry
+sudo mkdir -p /boot/grub2/themes/rinne
+sudo cp theme/* /boot/grub2/themes/rinne/
+sudo chmod -R a+rX /boot/grub2/themes/rinne
 ```
 
 改 `/etc/default/grub`：
 
 ```bash
-GRUB_THEME="/boot/grub2/themes/starry/theme.txt"
+GRUB_THEME="/boot/grub2/themes/rinne/theme.txt"
 GRUB_GFXMODE=1920x1080,1280x720,auto
 GRUB_TERMINAL_OUTPUT="gfxterm"
 GRUB_TERMINAL_INPUT="console"
@@ -38,7 +38,7 @@ grep -E 'set theme|terminal_output|set gfxmode' /boot/grub2/grub.cfg
 应该能看到：
 
 ```
-set theme="/boot/grub2/themes/starry/theme.txt"
+set theme="/boot/grub2/themes/rinne/theme.txt"
 terminal_output gfxterm
 set gfxmode=1920x1080,1280x720,auto
 ```
@@ -103,7 +103,7 @@ grep -n 'submenu' /boot/grub2/grub.cfg
 
 ```bash
 sudo rm -f /etc/grub.d/40_custom /etc/grub.d/01_gfxpayload
-sudo rm -rf /boot/grub2/themes/starry
+sudo rm -rf /boot/grub2/themes/rinne
 sudo sed -i '/GRUB_THEME/d' /etc/default/grub
 sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 ```
@@ -114,7 +114,7 @@ sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 
 装完重启前，逐条检查：
 
-- [ ] `ls /boot/grub2/themes/starry/` 能看到 `theme.txt`、`background.png`、18 个 `select_*.png` / `menu_*.png`、`unicode.pf2`
+- [ ] `ls /boot/grub2/themes/rinne/` 能看到 `theme.txt`、`background.png`、18 个 `select_*.png` / `menu_*.png`、`unicode.pf2`
 - [ ] `grep 'set theme' /boot/grub2/grub.cfg` 有输出
 - [ ] `grep 'terminal_output gfxterm' /boot/grub2/grub.cfg` 有输出
 - [ ] `grep 'gfxpayload=keep' /boot/grub2/grub.cfg` 在 `blscfg` 之前
