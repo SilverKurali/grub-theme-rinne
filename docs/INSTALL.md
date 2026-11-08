@@ -146,6 +146,46 @@ sudo rm -f /etc/systemd/system/island-bls-titles.path \
 sudo systemctl daemon-reload
 ```
 
+---
+
+## 可选：让菜单停久一点
+
+Fedora 默认 `GRUB_TIMEOUT=5`，5 秒内不按键就自动启动第一个条目。如果你觉得太快（尤其是要进子菜单选恢复点），改成 10 秒：
+
+完整参考（`docs/default-grub.example`）：
+
+```
+GRUB_TIMEOUT=10
+GRUB_TIMEOUT_STYLE=menu
+GRUB_TERMINAL_OUTPUT="gfxterm"
+GRUB_TERMINAL_INPUT="console"
+GRUB_GFXMODE=1920x1080,1280x720,auto
+GRUB_GFXPAYLOAD_LINUX=keep
+GRUB_THEME="/boot/grub2/themes/rinne/theme.txt"
+GRUB_ENABLE_BLSCFG=true
+GRUB_DISABLE_OS_PROBER=true
+```
+
+```bash
+sudo sed -i 's/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT=10/' /etc/default/grub
+sudo sed -i '/^GRUB_TIMEOUT_STYLE=/d' /etc/default/grub
+echo 'GRUB_TIMEOUT_STYLE=menu' | sudo tee -a /etc/default/grub
+```
+
+**还要删掉 `grubenv` 里的 `menu_auto_hide`**，否则某次启动 `boot_success=1` 之后菜单会自动隐藏：
+
+```bash
+sudo grub2-editenv - unset menu_auto_hide
+sudo grub2-editenv - list    # 应该看不到 menu_auto_hide 了
+sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+```
+
+**开机时想强制停在菜单**：按住 `Shift` 或连按 `Esc`。
+
+**关于 `boot_success`**：Fedora 有个 `grub-boot-success.timer`，进系统后跑满 2 分钟才会把 `boot_success` 置 1。如果你进系统不到 2 分钟就重启，`boot_success` 会一直是 0 —— 这不影响使用，只是 `menu_hide_ok` 一直是 0，菜单不会被自动隐藏（反而是好事）。
+
+**进度条只在倒计时时显示**：`progress_bar` 的 `id = "__timeout__"` 会绑定倒计时。按任意方向键，GRUB 就认为你要自己选，倒计时取消，进度条消失。这是设计行为，不是 bug。
+
 ## 卸载
 
 ```bash
