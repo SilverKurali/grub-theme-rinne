@@ -172,7 +172,7 @@ sudo reboot
 
 那十六小时里真正塌掉的六次，画成了六张图。
 
-[![六个坑](docs/illustrations/01-blackbox.png)](docs/STORY.md)
+[![六个坑](docs/illustrations/01-blackbox.jpg)](docs/STORY.md)
 
 **[→ 去看那一夜发生了什么](docs/STORY.md)**
 

@@ -22,7 +22,7 @@
 
 ## 一 · 黑框
 
-![黑框](illustrations/01-blackbox.png)
+![黑框](illustrations/01-blackbox.jpg)
 
 **我以为我知道黑框是什么。**
 
@@ -42,7 +42,7 @@ GRUB 把控制权交给内核，屏幕会黑一下——这是常识。我查了
 
 ## 二 · 键盘
 
-![键盘](illustrations/02-keyboard.png)
+![键盘](illustrations/02-keyboard.jpg)
 
 **我把输入终端从 `console` 改成了 `at_keyboard`。**
 
@@ -60,7 +60,7 @@ GRUB 把控制权交给内核，屏幕会黑一下——这是常识。我查了
 
 ## 三 · 套娃
 
-![套娃](illustrations/03-rsync.png)
+![套娃](illustrations/03-rsync.jpg)
 
 **`rsync -a src dest/` 和 `rsync -a src/ dest/` 差一个斜杠。**
 
@@ -76,7 +76,7 @@ GRUB 把控制权交给内核，屏幕会黑一下——这是常识。我查了
 
 ## 四 · 风扇
 
-![风扇](illustrations/04-fan.png)
+![风扇](illustrations/04-fan.jpg)
 
 **我留下了十六个 QEMU 进程，每个占一整个核。**
 
@@ -92,7 +92,7 @@ GRUB 把控制权交给内核，屏幕会黑一下——这是常识。我查了
 
 ## 五 · 拼图
 
-![拼图](illustrations/05-ninegrid.png)
+![拼图](illustrations/05-ninegrid.jpg)
 
 **九宫格的边，尺寸必须等于角。**
 
@@ -110,7 +110,7 @@ GRUB 的 `select_*.png` 是九张切片，用来拼一个可拉伸的选中条�
 
 ## 六 · 跑出来的备份
 
-![备份](illustrations/06-backup.png)
+![备份](illustrations/06-backup.jpg)
 
 **`grub2-mkconfig` 会执行 `/etc/grub.d/` 里所有可执行文件。**
 
