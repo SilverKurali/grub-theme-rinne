@@ -1,6 +1,6 @@
 # 那一夜，六个坑
 
-> 六张插画，六个真正的错误。作者是一条鱼。
+> 六张插画，六个真正的错误。作者是那个蓝头发的。
 
 <p align="center">
   <img src="illustrations/07-avatar.png" width="200" alt="社区画的形象">
