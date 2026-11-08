@@ -142,11 +142,11 @@ sudo reboot
 
 ## 这个项目怎么来的
 
-**全部由 DeepSeek V4.1 Fars 写成，人类只负责说"不对，再来一次"。**
+**全部由 DeepSeek-V4.1-Flash 写成，人类只负责说"不对，再来一次"。**
 
 | | |
 |---|---|
-| 模型 | DeepSeek V4.1 Fars |
+| 模型 | DeepSeek-V4.1-Flash |
 | 实际消耗 | 约 **2.15 亿 token** |
 | 本应该消耗 | 不到十分之一 |
 
